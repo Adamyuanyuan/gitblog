@@ -1,0 +1,2 @@
+.npmignore
+node_modules\hexo-deployer-git\node_modules\hexo-fs\node_modules\*

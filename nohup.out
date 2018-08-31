@@ -1,0 +1,237 @@
+INFO  Start processing
+INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.
+ERROR Process failed: _posts/2016-09-05-在Kerberos环境下配置hue通过spark-thrift-server访问SparkSql.md
+YAMLException: can not read a block mapping entry; a multiline key may not be an implicit key at line 10, column 1:
+    
+    ^
+    at generateError (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:162:10)
+    at throwError (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:168:9)
+    at readBlockMapping (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1040:9)
+    at composeNode (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1326:12)
+    at readDocument (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1488:3)
+    at loadDocuments (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1544:5)
+    at Object.load (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1561:19)
+    at parseYAML (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\hexo-front-matter\lib\front_matter.js:80:21)
+    at parse (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\hexo-front-matter\lib\front_matter.js:56:12)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\plugins\processor\post.js:52:18
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:507:35)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:567:18)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+    at PromiseArray._resolve (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:125:19)
+    at PromiseArray._promiseFulfilled (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:143:14)
+    at PromiseArray._iterate (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:113:31)
+    at PromiseArray.init [as _init] (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:77:10)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:564:21)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+    at PromiseArray._resolve (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:125:19)
+    at PromiseArray._promiseFulfilled (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:143:14)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:572:26)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+    at Promise._resolveCallback (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:431:57)
+    at Promise._settlePromiseFromHandler (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:522:17)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:567:18)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+ERROR Process failed: _posts/2016-09-05-在Kerberos环境下配置hue通过spark-thrift-server访问SparkSql.md
+YAMLException: can not read a block mapping entry; a multiline key may not be an implicit key at line 10, column 1:
+    
+    ^
+    at generateError (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:162:10)
+    at throwError (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:168:9)
+    at readBlockMapping (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1040:9)
+    at composeNode (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1326:12)
+    at readDocument (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1488:3)
+    at loadDocuments (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1544:5)
+    at Object.load (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\js-yaml\lib\js-yaml\loader.js:1561:19)
+    at parseYAML (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\hexo-front-matter\lib\front_matter.js:80:21)
+    at parse (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\hexo-front-matter\lib\front_matter.js:56:12)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\plugins\processor\post.js:52:18
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:507:35)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:567:18)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+    at PromiseArray._resolve (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:125:19)
+    at PromiseArray._promiseFulfilled (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:143:14)
+    at PromiseArray._iterate (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:113:31)
+    at PromiseArray.init [as _init] (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:77:10)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:564:21)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+    at PromiseArray._resolve (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:125:19)
+    at PromiseArray._promiseFulfilled (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise_array.js:143:14)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:572:26)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+    at Promise._resolveCallback (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:431:57)
+    at Promise._settlePromiseFromHandler (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:522:17)
+    at Promise._settlePromise (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:567:18)
+    at Promise._settlePromise0 (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:612:10)
+    at Promise._settlePromises (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:691:18)
+    at Promise._fulfill (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\promise.js:636:18)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:909:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1094:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:909:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1094:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1325:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1510:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1325:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1510:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1325:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1510:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1325:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1510:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+Unhandled rejection TypeError: E:\Adamyuanyuan\gitblog\themes\maupassant\layout\_partial\after_footer.jade:53
+    51|      var path = '#{config.root}' + search_path;
+    52|      searchFunc(path, 'local-search-input', 'local-search-result');
+  > 53| 
+    54| if theme.google_analytics
+    55|   script.
+    56|     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+
+Cannot read property 'path' of undefined
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1325:75)
+    at eval (eval at <anonymous> (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:1:0), <anonymous>:1510:22)
+    at res (E:\Adamyuanyuan\gitblog\node_modules\hexo-renderer-jade\node_modules\jade\lib\index.js:219:38)
+    at _compiled (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:127:30)
+    at View.render (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\theme\view.js:29:15)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\index.js:387:25
+    at tryCatcher (E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\util.js:16:23)
+    at E:\Adamyuanyuan\gitblog\node_modules\hexo\node_modules\bluebird\js\release\method.js:15:34
+    at RouteStream._read (E:\Adamyuanyuan\gitblog\node_modules\hexo\lib\hexo\router.js:134:3)
+    at RouteStream.Readable.read (_stream_readable.js:336:10)
+    at resume_ (_stream_readable.js:733:12)
+    at nextTickCallbackWith2Args (node.js:442:9)
+    at process._tickCallback (node.js:356:17)
+/c/Users/Adam/AppData/Roaming/npm/hexo: line 14: 12940 Hangup                  node "$basedir/node_modules/hexo-cli/bin/hexo" "$@"

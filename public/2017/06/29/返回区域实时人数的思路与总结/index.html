@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>返回区域实时人数的思路与总结 | Adam Home</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">返回区域实时人数的思路与总结</h1><a id="logo" href="/.">Adam Home</a><p class="description">快意回首，拂心莫停</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于我</i></a><a href="/timeline/"><i class="fa fa-line-chart"> 历史</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">返回区域实时人数的思路与总结</h1><div class="post-meta">Jun 29, 2017<span> | </span><span class="category"><a href="/categories/spark开发/">spark开发</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="clear"><div id="toc" class="toc-article"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景"><span class="toc-number">1.</span> <span class="toc-text">问题背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些简单可能的方案"><span class="toc-number">2.</span> <span class="toc-text">一些简单可能的方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于双层redis的方案"><span class="toc-number">3.</span> <span class="toc-text">基于双层redis的方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案思路"><span class="toc-number">3.1.</span> <span class="toc-text">方案思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可行性"><span class="toc-number">3.2.</span> <span class="toc-text">可行性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现方案"><span class="toc-number">3.3.</span> <span class="toc-text">实现方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题与提高"><span class="toc-number">3.4.</span> <span class="toc-text">问题与提高</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于数据过期的模糊方案"><span class="toc-number">4.</span> <span class="toc-text">基于数据过期的模糊方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方案思路-1"><span class="toc-number">4.1.</span> <span class="toc-text">方案思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现方案-1"><span class="toc-number">4.2.</span> <span class="toc-text">实现方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题与提高-1"><span class="toc-number">4.3.</span> <span class="toc-text">问题与提高</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结与思考"><span class="toc-number">5.</span> <span class="toc-text">总结与思考</span></a></li></ol></div></div><div class="post-content"><h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h2><p>先说一下整个位置服务的背景，需求比较复杂，细节比较多，在这里简明扼要说一下：</p>
+<ol>
+<li>用户A(spId)在中国地图上画了100个圆圈(locationId)，想让我们实时告诉他这些圈内新来的人和他的位置信息，哪些是游客哪些是土著；</li>
+<li>A的100个圆圈会随时修改，增大，变小，或者再多加100个圈圈，我们要不停程序，秒级给他这些数据；</li>
+<li>A觉得这样推送的数据量太大，因为有的人本来就住这个圈里，所以对每个不同的圈，里面的人在 7天（可调）之内不重复；</li>
+<li>用户B也想使用这个服务，在中国地图上画了100个圈，B的圈和A的圈可能重复可能不重复，需求是一样的；</li>
+<li>用户C也想使用这个服务，不过他觉得画个圈不符合他的要求，他要在地图上随便画100个什么图形，然后给他他想要的数据；</li>
+<li>用户D也想使用这个服务，不过他不想要知道这个图形里的人的细节，而是只想实时知道这个图形当下有多少人。</li>
+</ol>
+<p><strong>本文只关注返回区域实时人数的需求：</strong></p>
+<p>需求分为两大类，第一类是返回刚进入这个区域的人（返回明细），这个实现起来比较简单，因为它没有窗口的概念，只需要有数据过来，通过redis和mysql，经过一系列计算，判断它在景区并且是新来的人的话，直接推送到下游就好了；<br>第二个需求是实时返回这个区域的当前人数（返回人数）。这个听起来好像挺简单，比如当前上海迪士尼有56000个人，就给订阅者 56000这个数字就好了，但仔细思考一下就会发现较难实现，主要原因如下：</p>
+<ol>
+<li>实时上传过来的数据并不是全量数据，如果以5s为一批，这批上传的数据可能只占全国总量2亿用户中的100W条，这样就导致无法在一批数据中就得到结果；</li>
+<li>用户上传数据的频率也是不一致的，有的可能一分钟会发多条，有的可能四五十分钟才会上传一条，有的干脆好久都不会上传；</li>
+<li>多个订阅者同时订阅多个景区，每个订阅者的数据都要是对的；</li>
+<li>数据量太大，导致难以用时间窗口把它装住，数据还是得流进来，五秒内就得流出去；</li>
+</ol>
+<h2 id="一些简单可能的方案"><a href="#一些简单可能的方案" class="headerlink" title="一些简单可能的方案"></a>一些简单可能的方案</h2><p>为了满足上述需求，之前提出过一些方案：</p>
+<ol>
+<li>每次处理一个小时的数据，因为大概一个小时以内，所有的用户基本都会上传一遍数据，这样通过去重就能知道上个小时该区域的人数的，但这是相当于批处理，没有实时性，是最差的选择了；</li>
+<li>使用时间窗口，维护所有用户当前的位置信息，每隔一段时间计算，然后输出（类型与Apache Beam的定义模式），这个由于数据量太大，难以实现，因为有其它方案，所以也没有尝试；</li>
+<li>使用外部的一个数据库，维护所有用户的当前位置信息，然后每次计算，输出；如果用户量在千万级别以下的话，觉得用Mysql就可以了，但是2亿的用户，Mysql难以胜任，如果用Hbase或redis保存所有人状态的话，的话，每次统计计算多个区域的人数信息需要的计算量也很大，后来也没有尝试；</li>
+</ol>
+<h2 id="基于双层redis的方案"><a href="#基于双层redis的方案" class="headerlink" title="基于双层redis的方案"></a>基于双层redis的方案</h2><h3 id="方案思路"><a href="#方案思路" class="headerlink" title="方案思路"></a>方案思路</h3><p>首先引入两个状态：用户这次是否在景区 thisTime 和 用户上次是否在景区 lastTime，基于这两个状态，可以得到如下表格</p>
+<table>
+<thead>
+<tr>
+<th>用户位置判断</th>
+<th>本次是否在该区域</th>
+<th>上次是否在该区域</th>
+<th>处理逻辑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>情况1</td>
+<td>0</td>
+<td>0</td>
+<td>不处理</td>
+</tr>
+<tr>
+<td>情况2</td>
+<td>0</td>
+<td>1</td>
+<td>原子删除（一级总表和二级表）</td>
+</tr>
+<tr>
+<td>情况3</td>
+<td>1</td>
+<td>0</td>
+<td>原子增加（一级总表和二级表）</td>
+</tr>
+<tr>
+<td>情况4</td>
+<td>1</td>
+<td>1</td>
+<td>不处理</td>
+</tr>
+</tbody>
+</table>
+<p>如上表格所示，每个人都维护这次与上次两个状态，如果这个人这次不在该区域，上次也不在该区域，说明什么都不需要做，如果这个人这次不在该区域，上次在，说明这个人离开了这个区域，则就要把它从该区域中剔除；同理可得，如果这次在，上次不在，就把该用户加到该区域。这样一来，我们就可以对每个区域的人了如指掌，而且在理论上，这是目前位置最精确的判断方法。</p>
+<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>这套方案在这个问题上是可行的，虽然用户的位置轨迹类似于用户登陆网页的轨迹，但是又有极大的不同，因为每个人虽然都可离开这个网站，但是每个人都不会跳出地球！如果是网站的话，我只知道你访问了我这个网页所做的操作，但我不知道你什么时候没有访问我的网页，比如你从baidu.com跑到了google，baidu的数据里是不知道的，但你从这个区域跑到另外一个区域，我们的数据里是知道的，这就让该方案可行。</p>
+<h3 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h3><p>如下图右侧是实现方案的简化版，我们使用了双层redis的方法实现了这个思路，第一层redis的数据结构为hash，订阅者id(spId)命名(当然实际名称多了些前缀)，key是电话号码msisdn，value是它对应的区域id(locationId)，第二层redis的数据结构为Set，以区域id(locationId)命名，里面直接是 msisdn。<br><img src="/2017/06/29/返回区域实时人数的思路与总结/wzfw2_2.png" alt="wzfw2_2.png" title=""><br>判断本次是否在景区，直接根据位置算法进行计算就可以知道了，判断上次是否在景区，只需要循环去第一层redis中查有没有这个msisdn，如果有就返回它的locationId，如果没有，就说明该用户不在任何景区。如果要往该景区增加这个人，则需要同时往一级redis和二级对应的某一个redis中同时增加，同理，删除的话同时删除。值得注意的是，redis本身支持的事务并不支持回滚，所以还是要自己去控制它，通过返回值来进行原子删除和增加。上述操作的时间复杂度均为O(1)，道理上讲还是很快的。然后每个set都代表一个景区，想知道它的人数，so easy，O(1)的时间复杂度就能搞定了，连具体是谁都能列出来。</p>
+<p>当然具体的代码实现就繁杂很多了：</p>
+<ol>
+<li>因为是不同的订阅者订阅好多景区，一个用户可能同时在多个订阅者订阅的好多个景区，这就要循环判断很多，会存在RDD的一条输入，输出是多条的情况；</li>
+<li>除了上述四种情况，还有几种情况需要考虑到，比如这个人从这个区域跑到同一个订阅者订阅的另一个区域的话，就需要使用 redis set的move操作，同时改变一级hash表的值。如果跑到另一个订阅者的另一个区域的话，又会有它相应的逻辑。<br>但大部分情况下还是以上四种逻辑，毕竟中国很大，订阅的区域间距还是比较远的。</li>
+<li>为了防止各种原因导致redis中脏数据的产生，在存入的时候会加一个时间戳，如果时间过长，就会将其中的数据删除。<br>实现逻辑大概代码流程图如下：<img src="/2017/06/29/返回区域实时人数的思路与总结/wzfw2_3.png" alt="wzfw2_3.png" title="">
+</li>
+</ol>
+<p>为什么要以双层redis的方法呢？单层的不行嘛？由于我们的数据量非常大，如果仅仅是单层的hash的话，每次去计算某个景区的人数，又要把所有的数据全部遍历一遍，这个性能消耗是非常大的，这里采用空间换时间的方法，用极少的空间，节省了大量的时间。说白了，如果数据量小的话，用mysql之类的关系型数据库最好了，查的时候只要类似于<code>select count(*) from spId where locationId = locationA</code>之类的语句就可以了。使用Hbase能不能达到这个要求呢？个人没有进行过更深入的调研，浅薄地认为因为hbase的数据本身是存在hdfs的，如果是全量数据的话，它缓存命中的概率是比较低的，这样延迟会比较大，那么大的数据，难以秒级全部响应，所以就再也没有深入调研。</p>
+<h3 id="问题与提高"><a href="#问题与提高" class="headerlink" title="问题与提高"></a>问题与提高</h3><p>这个方案，理论上的结果是很精确的，但是它有一个小问题，就是在判断用户上次是否在该区域的时候，“在判断该用户上次是否在该区域之前，我们是不知道他上次是否在某个区域的”，这话听起来比较拗口，换一种方式表达：对于全国每一个用户的每一条数据，我们都要判断它上次是否在某个区域，这代表20W/s的redis读！当然我这边会做一些优化，先根据城市id进行过滤，仅仅读相关城市的数据，不过这个数据量也是比较大的，也到了1W/s的级别。</p>
+<p>实际生产压测过程中，当全量数据上来后，由于redis的每次连接导致网络IO过多，响应会变慢，导致程序会逐渐产生延迟，也影响到了稳定运行的明细数据需求，所以存在问题！</p>
+<p>由于我们的redis是与其它需求共用的，并且当时为了稳定使用的sentinel模式，也难以在有限的几天内就申请到cluster模式的redis集群，也难以使用pipeline来优化，还有几天就要上线了。所以提出了下面的基于数据过期的模糊方案来进行过渡。</p>
+<h2 id="基于数据过期的模糊方案"><a href="#基于数据过期的模糊方案" class="headerlink" title="基于数据过期的模糊方案"></a>基于数据过期的模糊方案</h2><p>提出模糊方案的一个前提是，用户上传的数据本来就是模糊的，如果一个用户半个小时上传一次他的位置数据，我们无法得知他在这半个小时之间的位置，也无法得知他下半个小时在哪里</p>
+<h3 id="方案思路-1"><a href="#方案思路-1" class="headerlink" title="方案思路"></a>方案思路</h3><p>用户每次进入某个区域后，就将它存入该区域集合中，不用考虑其它，区域中的数据是有时效的，超过30min(可调)后，区域中的数据就会被直接删除。</p>
+<h3 id="实现方案-1"><a href="#实现方案-1" class="headerlink" title="实现方案"></a>实现方案</h3><p>对于每一个位置 locationId，我们使用redis的 sorted set数据结构，里面保存的值是msisdn，里面的score值是当前时间戳精确到分钟。它插入(zadd)的时间复杂度是O(log(N))，移除(ZREMRANGEBYSCORE)的时间复杂度是 O(log(N)+M)。每次有符合条件的数据，我们就直接插入到相应的locationId，然后异步地通过外部程序，对其中过期超过30min(可调)的数据进行批量删除，实际中这个删除是在spark Streaming的driver中实现每10s删除一次。</p>
+<p>该方案虽然在插入时时间复杂度有所增加，但是极大得简化了redis的连接次数，ZREMRANGEBYSCORE操作也只是统一每隔10s执行一次，最终程序稳定运行在了生产。</p>
+<h3 id="问题与提高-1"><a href="#问题与提高-1" class="headerlink" title="问题与提高"></a>问题与提高</h3><p>该方案的优点是简单易行，问题是它并不像上一个方案一样是理论上精确的，但由于原始数据并不精确，所以有它存在的道理。<br>关于超时删除时间，这个时间是可以调优的，调优方案很简单，就一个变量而已，通过批处理的方式对区域的数据进行精确的统计，然后对比两者的结果，最终找出一个最靠谱的超时删除时间。<br>当然，区域的订阅面积越大，redis的响应就越慢，所以当订阅面积大到一定程度，redis肯定也是扛不住的。</p>
+<h2 id="总结与思考"><a href="#总结与思考" class="headerlink" title="总结与思考"></a>总结与思考</h2><ol>
+<li>判断区域人数是一个比较通用的需求，比如判断当前网站在线用户数，当前频道观众，但是具体实现起来的确觉得不那么简单，我目前能想到的算法就这两个，总觉得会有更好的方法，不同的问题背景产生不同的方法；</li>
+<li>我们设计与实现双层redis方法的时候，没有考虑到redis网络IO过多导致延迟的问题，以后一定要评估好性能瓶颈，提前申请机器；</li>
+<li>有时候追求完美不是好事，完美得向现实妥协，最优的算法并不是最适合的，要在满足需求的基础上，以最少的代码完成这个事情，增加鲁棒性；</li>
+<li>之前对时间窗口相关的不太深入，接下来深入理解一下structured Streaming与Apache Beam的API的逻辑；</li>
+</ol>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://flume.cn/2017/06/29/返回区域实时人数的思路与总结/" data-id="cjgd2byg0003leggugp1lcxyw" class="article-share-link">分享</a><div class="tags"><a href="/tags/redis/">redis</a><a href="/tags/spark开发/">spark开发</a></div><div class="post-nav"><a href="/2017/07/17/spark指定java版本向yarn提交程序/" class="pre">spark在yarn中运行jdk8</a><a href="/2017/06/28/位置服务开发上线总结/" class="next">位置服务开发上线总结————实时数据推送</a></div><div id="uyan_frame"></div><script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2139407"></script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/eagle/">eagle</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flume/">flume</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scala/">scala</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spark/">spark</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spark开发/">spark开发</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-cloud/">spring cloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/单车岁月/">单车岁月</a><span class="category-list-count">5</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/大数据开发/" style="font-size: 15px;">大数据开发</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/hue/" style="font-size: 15px;">hue</a> <a href="/tags/kerberos/" style="font-size: 15px;">kerberos</a> <a href="/tags/livy/" style="font-size: 15px;">livy</a> <a href="/tags/hbase/" style="font-size: 15px;">hbase</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/flume/" style="font-size: 15px;">flume</a> <a href="/tags/spark-streaming/" style="font-size: 15px;">spark streaming</a> <a href="/tags/kafka/" style="font-size: 15px;">kafka</a> <a href="/tags/spark/" style="font-size: 15px;">spark</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/持续更新/" style="font-size: 15px;">持续更新</a> <a href="/tags/spark开发/" style="font-size: 15px;">spark开发</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/算法/" style="font-size: 15px;">算法</a> <a href="/tags/散文/" style="font-size: 15px;">散文</a> <a href="/tags/eagle/" style="font-size: 15px;">eagle</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/spring-cloud/" style="font-size: 15px;">spring cloud</a> <a href="/tags/微服务/" style="font-size: 15px;">微服务</a> <a href="/tags/es/" style="font-size: 15px;">es</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/08/spark2-2新版本编译打包/">spark2.2新版本编译打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/31/使用Ansable安装管理Spark客户端/">使用Ansable安装管理Spark客户端</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/17/spark往ES中写入数据的方法/">spark往ES中写入数据的方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/17/spark指定java版本向yarn提交程序/">spark在yarn中运行jdk8</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/29/返回区域实时人数的思路与总结/">返回区域实时人数的思路与总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/28/位置服务开发上线总结/">位置服务开发上线总结————实时数据推送</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/spark奇技淫巧总结之flatMap/">spark奇技淫巧总结之强大的flatMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/22/OpenAPI微服务接入规范/">OpenAPI微服务接入规范</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/29/OpenApi之我浅薄见解/">OpenApi之我浅薄见解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/24/阿里巴巴Java开发手册学习笔记2/">阿里巴巴Java开发手册学习笔记（下）</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://issues.apache.org/jira/secure/Dashboard.jspa" title="有问题上JIRA" target="_blank">有问题上JIRA</a><ul></ul><a href="https://github.com/lw-lin/CoolplaySpark" title="酷玩 Spark" target="_blank">酷玩 Spark</a><ul></ul><a href="http://lqding.blog.51cto.com" title="叮咚的51博客" target="_blank">叮咚的51博客</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">Adam Home.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

@@ -1,0 +1,22 @@
+<h2 id="总体架构"><a href="#总体架构" class="headerlink" title="总体架构"></a>总体架构</h2><p>总体架构图如下：<br></p>
+<p>如上图：主要分为三大部分：</p>
+<h4 id="上游数据"><a href="#上游数据" class="headerlink" title="上游数据"></a>上游数据</h4><p>由东方国信提供各个省份的Oidd数据，发送至kafka集群</p>
+<h4 id="处理逻辑"><a href="#处理逻辑" class="headerlink" title="处理逻辑"></a>处理逻辑</h4><ol>
+<li>Web微服务端：web微服务接受位置数据订阅，并将订阅的景区信息存储至Mysql中；</li>
+<li>景区用户识别端：由Spark Streaming程序根据订阅信息实时对上游数据进行处理，识别出到达景区的最新电话号码列表，发送至下游；</li>
+</ol>
+<h4 id="下游系统"><a href="#下游系统" class="headerlink" title="下游系统"></a>下游系统</h4><p>处理逻辑将处理结果通过FTP共享接口发送至下游大数据营销系统，由大数据营销系统实现推荐等。</p>
+<h2 id="处理逻辑-1"><a href="#处理逻辑-1" class="headerlink" title="处理逻辑"></a>处理逻辑</h2><h3 id="景区用户识别端详解"><a href="#景区用户识别端详解" class="headerlink" title="景区用户识别端详解"></a>景区用户识别端详解</h3><p>景区用户识别端详解逻辑由Spark Streaming程序实现，运行部署在yarn集群中，是一个实时的容错的处理逻辑<br>分别实现如下功能：</p>
+<h4 id="配置信息读取"><a href="#配置信息读取" class="headerlink" title="配置信息读取"></a>配置信息读取</h4><p>kafka，flume，redis，mysql等配置信息配置在数据库中，系统载入试进行自动化预读取</p>
+<h4 id="接收Kakfa消息流"><a href="#接收Kakfa消息流" class="headerlink" title="接收Kakfa消息流"></a>接收Kakfa消息流</h4><p>接收由国信发送至kafka的消息流，并将其分发到不同的机器，设置并发度；</p>
+<h4 id="对所有的号码根据mdn生成key"><a href="#对所有的号码根据mdn生成key" class="headerlink" title="对所有的号码根据mdn生成key"></a>对所有的号码根据mdn生成key</h4><h4 id="对mdn重复数据进行去重"><a href="#对mdn重复数据进行去重" class="headerlink" title="对mdn重复数据进行去重"></a>对mdn重复数据进行去重</h4><p>注意这里是在每台不同的机器下进行的去重，而不是整体的去重</p>
+<h4 id="建立Redis连接"><a href="#建立Redis连接" class="headerlink" title="建立Redis连接"></a>建立Redis连接</h4><p>在每台机器上建立Redis连接池，</p>
+<h4 id="动态读取Mysql订阅信息"><a href="#动态读取Mysql订阅信息" class="headerlink" title="动态读取Mysql订阅信息"></a>动态读取Mysql订阅信息</h4><p>对每一批数据，动态从mysql数据库中载入订阅的景区信息L0，并将其转换成 cityCode -&gt; PositionSubData的 HashMap util.HashMap[Int, util.LinkedList[PositionSubData]]</p>
+<h4 id="对源数据进行过滤，不在景区所属城市的数据丢掉"><a href="#对源数据进行过滤，不在景区所属城市的数据丢掉" class="headerlink" title="对源数据进行过滤，不在景区所属城市的数据丢掉"></a>对源数据进行过滤，不在景区所属城市的数据丢掉</h4><h4 id="读取Redis中已经保存的景区用户信息列表"><a href="#读取Redis中已经保存的景区用户信息列表" class="headerlink" title="读取Redis中已经保存的景区用户信息列表"></a>读取Redis中已经保存的景区用户信息列表</h4><p>从Redis中获取之前保存的号码列表L1，并且对过期的数据进行双向删除</p>
+<h4 id="判断数据是否需要推送"><a href="#判断数据是否需要推送" class="headerlink" title="判断数据是否需要推送"></a>判断数据是否需要推送</h4><p>数据是否需要推送需要满足：</p>
+<ol>
+<li>不在Redis中：与Redis中数据进行对比，在Redis中的数据删除</li>
+<li>在景区里：通过判断数据是否在景区里，如果在景区，则返回它对应的locationId_intervalTime_spId，否则返回””;</li>
+<li>更新Redis </li>
+</ol>
+<h4 id="数据统一发送"><a href="#数据统一发送" class="headerlink" title="数据统一发送"></a>数据统一发送</h4><p>将处理好的数据按照一定的规则统一批量发送至flume</p>
